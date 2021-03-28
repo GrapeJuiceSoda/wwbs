@@ -1,0 +1,25 @@
+title "Test Website" # The title of the website
+header #Contains the Author and Date
+nav # Navigation Bar
+
+#--------------------------------------------------
+
+# Basic Text
+This is how you write the text
+You can have multi line
+# <p>This is how you write the text</p>
+
+# Basic Link
+link https://tools.suckless.org/ suckless_tools
+# <a href="http://tools.suckless.org/">suckless_tools</a> 
+
+Anyways Thats the end of this shitty website
+# <p>Anyways Thats the end of this shitty website</p>
+
+# Basic Picture
+picture ./sample_pic/pic1.jpg
+# <img src="./sample_pic/pic1.jpg"/>
+
+#--------------------------------------------------
+
+footer # Back to the Top
