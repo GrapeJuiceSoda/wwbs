@@ -1,7 +1,15 @@
 #!/bin/bash
 
+# Create the HTML file
+cp $1 "$1.html"
+
+html_file="$1.html"
+
 # Delete all lines that begin with #
-sed -i '/^#/d' "$1"
+sed -i '/^#/d' $html_file
+
+# Delete comments inline
+sed -ri 's/(.+)(#.+)/\1/' $html_file
 
 # This sed script will delete double blank lines
 sed -ri '
@@ -17,7 +25,7 @@ b
 
 :delete
 g # Override the pattern buffer with the hold pattern
-' "$1"
+' $html_file
 
 # This sed script will wrap the text with paragraph symbols
 sed -rni '
@@ -36,4 +44,5 @@ s/(\n*)(.*)/\1\<p\>\n\2\n\<\/p\>/p # Surround the text block with paragraph symb
 b
 }
 p # Print
-' "$1"
+' $html_file
+
