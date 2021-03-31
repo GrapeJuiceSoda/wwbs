@@ -39,7 +39,7 @@ b
 
 :wrap
 x # Swap the pattern and hold buffer
-/\n(title|header|nav|link|picture|footer)/!{ # Check if the line is not a regular text
+/\n(title|header|nav|link|picture|footer|ul|nl)/!{ # Check if the line is not a regular text
 s/(\n*)(.*)/\1\<p\>\n\2\n\<\/p\>/p # Surround the text block with paragraph symbols
 b
 }

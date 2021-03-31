@@ -5,20 +5,39 @@ nav # Navigation Bar
 #--------------------------------------------------
 
 # Basic Text
+: Header 1
 This is how you write the text
 You can have multi line
 # <p>This is how you write the text</p>
 
-# Basic Link
+:: This is a link
+Basic Link
+
 link https://tools.suckless.org/ suckless_tools
 # <a href="http://tools.suckless.org/">suckless_tools</a> 
 
 Anyways Thats the end of this shitty website
 # <p>Anyways Thats the end of this shitty website</p>
 
-# Basic Picture
+:: This is a Picture
+Basic Picture
+
 picture ./sample_pic/pic1.jpg
 # <img src="./sample_pic/pic1.jpg"/>
+
+:: Basic Lists
+
+ul
+* The first item
+* The second item
+* The third item
+ul
+
+nl
+* The first item
+* The second item
+* The third item
+nl
 
 #--------------------------------------------------
 
