@@ -5,12 +5,12 @@ nav # Navigation Bar
 #--------------------------------------------------
 
 # Basic Text
-h1 Header 1
+h2 Header 1
 This is how you write the text.
 You can have multi line.
 # <p>This is how you write the text</p>
 
-:: This is a link
+h2 This is a link
 Basic Link
 
 link https://tools.suckless.org/ suckless_tools

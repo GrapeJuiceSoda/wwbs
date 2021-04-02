@@ -97,6 +97,21 @@ create_symbols (){
     ' $1
 }
 
+create_list (){
+    sed -rin "
+        # If a line starts with <ul> jump to wrap label
+        /^<ul>/ b move
+        b
+    
+        :move
+        n # Read in next line into the pattern buffer (line counter increases)
+        /^<li>/{
+        b move # primitive looping!!
+        }
+        s/.*/<\/ul>/ # Substitute all of the pattern buffer for <\ul>
+    " $1
+}
+
 create_title (){
     title_src=$(head -n 1 $file)
     title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" $html_file)
@@ -114,6 +129,7 @@ del_blank $html_file
 create_para $html_file
 create_header $html_file
 create_symbols $html_file
+create_list $html_file
 create_title
 
 # Clean up
