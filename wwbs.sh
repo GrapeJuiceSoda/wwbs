@@ -56,7 +56,7 @@ create_para(){
 
 
 # Input is $html_file
-create_header(){
+create_header (){
     # read in a line from the $html_file
     while read line; do
         # Grab the line that contains the header symbol
@@ -71,21 +71,42 @@ create_header(){
             /$line/ b wrap
             b
             :wrap
-            s|(:+)(.*)|<h$header_num>\2<\/h$header_num>|
+            s|(:+ )(.*)|<h$header_num>\2<\/h$header_num>|
             " $1
         fi
     done < $1
 }
 
-del_comments $html_file
-echo "comp"
-del_blank $html_file
-echo "comp"
-create_para $html_file
-echo "comp"
-create_header $html_file
-echo "comp"
+# Input is $html_file
+create_symbols (){
+    sed -rin '
+    /^(link|picture|ul|nl)/ b wrap
+    b
+    
+    :wrap
+    /^link/ b link_wrap
+    /^picture/ b picture_wrap
+    b
+    
+    :link_wrap
+    s/(link )(.* )(.*)/<a href=\"\2\">\3<\/a>/
+    b
+    
+    :picture_wrap
+    s/(picture )(.*)/<img src=\"\2\"\/>/
+    b
 
+    ' $1
+}
+
+
+del_comments $html_file
+del_blank $html_file
+create_para $html_file
+create_header $html_file
+create_symbols $html_file
+
+# Clean up
 file=$(ls ./ | grep ".htmln")
 if [[ -f $file ]]; then
     echo "Removing something"
