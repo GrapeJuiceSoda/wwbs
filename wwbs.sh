@@ -3,7 +3,10 @@
 # Create the HTML file
 cp $1 "$1.html"
 
+file=$1
 html_file="$1.html"
+author="GrapeJuiceSoda"
+date=$(date)
 
 #Input $html_file
 del_comments (){
@@ -57,35 +60,22 @@ create_para(){
 
 # Input is $html_file
 create_header (){
-    # read in a line from the $html_file
-    while read line; do
-        # Grab the line that contains the header symbol
-        flag=$(echo "$line" | grep "^:")
-        # Get the length of the grepped line
-        len=$(echo ${#flag})
-        if [[ $len != 0 ]]; then
-            # Get the length of the header symbol
-            header_num=$(echo $line | awk '{print length($1)}')
-            # Swap the header symbols for <h#>
-            sed -rin "
-            /$line/ b wrap
-            b
-            :wrap
-            s|(:+ )(.*)|<h$header_num>\2<\/h$header_num>|
-            " $1
-        fi
-    done < $1
+    sed -rin "
+    s/(^h)([0-9])(.*)/<h\2>\3<\/h\2>/
+    " $1
 }
 
 # Input is $html_file
 create_symbols (){
     sed -rin '
-    /^(link|picture|ul|nl)/ b wrap
+    /^(link|picture|ul|nl|\*)/ b wrap
     b
     
     :wrap
     /^link/ b link_wrap
     /^picture/ b picture_wrap
+    /^ul/ b unorder_wrap
+    /^\*/ b list_wrap
     b
     
     :link_wrap
@@ -96,7 +86,26 @@ create_symbols (){
     s/(picture )(.*)/<img src=\"\2\"\/>/
     b
 
+    :unorder_wrap
+    s/ul/<ul>/
+    b
+
+    :list_wrap
+    s/(^\* )(.*)/<li>\2<\/li>/
+    b
+
     ' $1
+}
+
+create_title (){
+    title_src=$(head -n 1 $file)
+    title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" $html_file)
+    sub_title=$(sed -rn "s/header/<h5>$author \| $date<\/h5>/p" $html_file)
+    sed -in "1,4d" $html_file
+    sed -i "
+    1i $title
+    2i $sub_title
+    " $html_file
 }
 
 
@@ -105,6 +114,7 @@ del_blank $html_file
 create_para $html_file
 create_header $html_file
 create_symbols $html_file
+create_title
 
 # Clean up
 file=$(ls ./ | grep ".htmln")
