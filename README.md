@@ -1,7 +1,7 @@
-this is not optimized 
-
-sorry!!
-
-you can create a pull request if you want
+To Do
+* Add CSS
+* Directory Structure Finalization
+* Code Tag
+* Simple and CSS flag
 
 ![](./sample_pic/crued_website.png)
