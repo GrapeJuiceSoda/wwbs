@@ -1,10 +1,11 @@
 #!/bin/bash
 
 # Create the HTML file
-cp $1 "$1.html"
+file=$(echo $1 | sed -nr 's/(.*\/)(.*)/\2/p')
+cp $1 "$file.html"
+mv "$file.html" ./html/
+html_file="$file.html"
 
-file=$1
-html_file="$1.html"
 author="GrapeJuiceSoda"
 date=$(date)
 
@@ -83,7 +84,7 @@ create_symbols (){
     b
     
     :picture_wrap
-    s/(picture )(.*)/<img src=\"\2\"\/>/
+    s/(picture )(.*)/<img src=\"..\/pictures\/\2\"\/>/
     b
 
     :unorder_wrap
@@ -113,27 +114,27 @@ create_list (){
 }
 
 create_title (){
-    title_src=$(head -n 1 $file)
-    title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" $html_file)
-    sub_title=$(sed -rn "s/header/<h5>$author \| $date<\/h5>/p" $html_file)
-    sed -in "1,4d" $html_file
+    title_src=$(head -n 1 ./page/$file)
+    title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" ./html/$html_file)
+    sub_title=$(sed -rn "s/header/<h5>$author \| $date<\/h5>/p" ./html/$html_file)
+    sed -in "1,4d" ./html/$html_file
     sed -i "
     1i $title
     2i $sub_title
-    " $html_file
+    " ./html/$html_file
 }
 
 
-del_comments $html_file
-del_blank $html_file
-create_para $html_file
-create_header $html_file
-create_symbols $html_file
-create_list $html_file
-create_title
+del_comments ./html/$html_file
+del_blank ./html/$html_file
+create_para ./html/$html_file
+create_header ./html/$html_file
+create_symbols ./html/$html_file
+create_list ./html/$html_file
+create_title 
 
 # Clean up
-file=$(ls ./ | grep ".htmln")
+file=./html/$(ls ./html/ | grep ".htmln")
 if [[ -f $file ]]; then
     echo "Removing something"
     rm $file
