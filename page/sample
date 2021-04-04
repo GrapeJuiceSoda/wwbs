@@ -5,7 +5,7 @@ nav # Navigation Bar
 #--------------------------------------------------
 
 # Basic Text
-h2 Header 1
+h2 Header
 This is how you write the text.
 You can have multi line.
 # <p>This is how you write the text</p>

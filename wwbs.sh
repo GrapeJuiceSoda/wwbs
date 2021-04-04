@@ -123,8 +123,8 @@ create_title (){
     sed -i "
     1i $style_sheet
     2i $title
-    3i $anchor
-    4i $sub_title
+    3i $sub_title
+    4i $anchor
     " ./html/$html_file
 }
 

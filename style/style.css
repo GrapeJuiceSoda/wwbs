@@ -18,3 +18,17 @@ img {
 small {
     word-spacing: 3px;
 }
+
+h1 {
+    /* color: #8888cc; */
+    color: #17a;
+
+}
+
+a {
+    color: #17a;
+}
+
+a:hover {
+    color:#8888cc; text-decoration: underline;
+}
