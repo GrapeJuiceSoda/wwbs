@@ -4,4 +4,4 @@ To Do
 * Code Tag
 * Simple and CSS flag
 
-![](./sample_pic/crued_website.png)
+![](./pictures/crued_website.png)
