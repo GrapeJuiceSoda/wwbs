@@ -5,6 +5,8 @@
     margin-bottom: 1em;
     word-wrap: break-word;
     background-color: #ffffee;
+    line-height: 1.5;
+    word-spacing: 5px;
 }
 
 img {
@@ -13,4 +15,6 @@ img {
 	padding-bottom: 1em;
 }
 
-
+small {
+    word-spacing: 3px;
+}

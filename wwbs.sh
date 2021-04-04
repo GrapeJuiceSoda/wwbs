@@ -115,15 +115,22 @@ create_list (){
 
 create_title (){
     title_src=$(head -n 1 ./page/$file)
+    anchor="<a href=\"#top\"><\/a>"
     title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" ./html/$html_file)
     style_sheet="<link rel="stylesheet" href="../style/style.css">"
-    sub_title=$(sed -rn "s/header/<h5>$author \| $date<\/h5>/p" ./html/$html_file)
+    sub_title=$(sed -rn "s/header/<small>$author \| $date<\/small>/p" ./html/$html_file)
     sed -in "1,4d" ./html/$html_file
     sed -i "
     1i $style_sheet
     2i $title
-    3i $sub_title
+    3i $anchor
+    4i $sub_title
     " ./html/$html_file
+}
+
+create_footer (){
+    sed -rin "$ d" ./html/$html_file
+    echo "<small><a name="top" href="">Top</a></small>" >> ./html/$html_file
 }
 
 
@@ -134,6 +141,7 @@ create_header ./html/$html_file
 create_symbols ./html/$html_file
 create_list ./html/$html_file
 create_title 
+create_footer
 
 # Clean up
 file=./html/$(ls ./html/ | grep ".htmln")
