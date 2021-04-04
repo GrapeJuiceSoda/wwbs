@@ -1,0 +1,16 @@
+* {
+    width: 45em;
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    word-wrap: break-word;
+    background-color: #ffffee;
+}
+
+img {
+	max-width: 20em;
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+

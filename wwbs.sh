@@ -116,11 +116,13 @@ create_list (){
 create_title (){
     title_src=$(head -n 1 ./page/$file)
     title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" ./html/$html_file)
+    style_sheet="<link rel="stylesheet" href="../style/style.css">"
     sub_title=$(sed -rn "s/header/<h5>$author \| $date<\/h5>/p" ./html/$html_file)
     sed -in "1,4d" ./html/$html_file
     sed -i "
-    1i $title
-    2i $sub_title
+    1i $style_sheet
+    2i $title
+    3i $sub_title
     " ./html/$html_file
 }
 
