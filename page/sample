@@ -7,12 +7,13 @@ nav # Navigation Bar
 # Basic Text
 h2 Header
 This is how you write the text.
-You can have multi line.
 # <p>This is how you write the text</p>
+You can have multiple lines.
+If you have a new line inbetween the lines, it gets counted as a new paragraph.
 
-h2 This is a link
-Basic Link
+Like in regular markdown!
 
+Basic Link: 
 link https://tools.suckless.org/ suckless_tools
 # <a href="http://tools.suckless.org/">suckless_tools</a> 
 
@@ -49,6 +50,37 @@ Game of as rest time eyes with of this it. Add was music merry any truth since g
 Now indulgence dissimilar for his thoroughly has terminated. Agreement offending commanded my an. Change wholly say why eldest period. Are projection put celebrated particular unreserved joy unsatiable its. In then dare good am rose bred or. On am in nearer square wanted. 
 
 Ladyship it daughter securing procured or am moreover mr. Put sir she exercise vicinity cheerful wondered. Continual say suspicion provision you neglected sir curiosity unwilling. Simplicity end themselves increasing led day sympathize yet. General windows effects not are drawing man garrets. Common indeed garden you his ladies out yet. Preference imprudence contrasted to remarkably in on. Taken now you him trees tears any. Her object giving end sister except oppose. 
+
+h2 Some C Code
+code
+experienced programmer
+!
+static int zeroes(int *a, int i)
+{
+    while(i--)
+        if(*a++ != 0)
+            return 0;
+    return 1;
+}
+!
+inexperienced programmer
+!
+int IsOnlyZeroes(int iArray[], int iCount)
+{
+    int Index, Result;
+!
+    Result = 1; /* set result to 1 */
+    for(Index = 0; Index < iCount; Index++) /* iterate */
+    {
+        if(iArray[Index] == 0) /* check if zero */
+        {
+            Result = 0; /* set result to 0 */
+        }
+    }
+    return Result; /* return result */
+}
+!
+Taken from Aiju (https://aiju.de/b/style)
 
 #--------------------------------------------------
 

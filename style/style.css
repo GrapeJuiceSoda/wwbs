@@ -32,3 +32,19 @@ a {
 a:hover {
     color:#8888cc; text-decoration: underline;
 }
+
+.hl_box {
+    background-color: #A9A9A9;
+    width: 45em;
+    margin: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.hl_box pre {
+    background-color: #A9A9A9;
+}
+
+.hl_box code {
+    background-color: #A9A9A9;
+}

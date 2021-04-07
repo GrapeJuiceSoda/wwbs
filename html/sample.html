@@ -2,18 +2,19 @@
 
 <h1>Test Website</h1> 
 <p>
-<small>GrapeJuiceSoda | Sun Apr  4 04:32:24 PM PDT 2021</small> 
+<small>GrapeJuiceSoda | Tue Apr  6 10:34:37 PM PDT 2021</small> 
 <h2> Header</h2>
 <a href="#top"></a>
 This is how you write the text.
-You can have multi line.
+You can have multiple lines.
+If you have a new line inbetween the lines, it gets counted as a new paragraph.
 </p>
 
 <p>
-<h2> This is a link</h2>
-Basic Link
+Like in regular markdown!
 </p>
 
+Basic Link: 
 <a href="https://tools.suckless.org/ ">suckless_tools</a>
 
 <p>
@@ -74,4 +75,46 @@ Now indulgence dissimilar for his thoroughly has terminated. Agreement offending
 Ladyship it daughter securing procured or am moreover mr. Put sir she exercise vicinity cheerful wondered. Continual say suspicion provision you neglected sir curiosity unwilling. Simplicity end themselves increasing led day sympathize yet. General windows effects not are drawing man garrets. Common indeed garden you his ladies out yet. Preference imprudence contrasted to remarkably in on. Taken now you him trees tears any. Her object giving end sister except oppose. 
 </p>
 
+<p>
+<h2> Some C Code</h2>
+<div class=hl_box>
+<pre>
+<code>
+experienced programmer
+
+
+static int zeroes(int *a, int i)
+{
+    while(i--)
+        if(*a++ != 0)
+            return 0;
+    return 1;
+}
+
+
+inexperienced programmer
+
+
+int IsOnlyZeroes(int iArray[], int iCount)
+{
+    int Index, Result;
+
+
+    Result = 1; /* set result to 1 */
+    for(Index = 0; Index < iCount; Index++) /* iterate */
+    {
+        if(iArray[Index] == 0) /* check if zero */
+        {
+            Result = 0; /* set result to 0 */
+        }
+    }
+    return Result; /* return result */
+}
+
+
+Taken from Aiju (https://aiju.de/b/style)
+</p>
+</code>
+</pre>
+</div>
 <small><a name=top href=>Top</a></small>

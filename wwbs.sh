@@ -133,6 +133,28 @@ create_footer (){
     echo "<small><a name="top" href="">Top</a></small>" >> ./html/$html_file
 }
 
+create_code (){
+    sed -rin "
+        # If a line starts with code jump to wrap label
+        s/^code/<div class=hl_box>\n<pre>\n<code>/
+        t move
+        b
+    
+        :move
+        n # Read in next line into the pattern buffer (line counter increases)
+
+        /^!/{
+        s/.*/\n/
+        t move # Jump to move label only if substitution occurs
+        }
+
+        /^$/!{
+        b move # primitive looping!!
+        }
+        s/.*/<\/code>\n<\/pre>\n<\/div>/ # Substitute all of the pattern buffer
+    " $1
+}
+
 
 del_comments ./html/$html_file
 del_blank ./html/$html_file
@@ -140,6 +162,7 @@ create_para ./html/$html_file
 create_header ./html/$html_file
 create_symbols ./html/$html_file
 create_list ./html/$html_file
+create_code ./html/$html_file
 create_title 
 create_footer
 
