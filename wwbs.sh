@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# Create the HTML file
-file=$(echo $1 | sed -nr 's/(.*\/)(.*)/\2/p')
-cp $1 "$file.html"
-mv "$file.html" ./html/
-html_file="$file.html"
-
-author="GrapeJuiceSoda"
-date=$(date)
-
 #Input $html_file
 del_comments (){
     # Delete all lines that begin with #
@@ -155,16 +146,68 @@ create_code (){
     " $1
 }
 
+create_html (){
+    cp $file_path "$file.html"
+    html_file="$file.html"
+    mv "$html_file" ./html/
+    
+    author="GrapeJuiceSoda"
+    date=$(date)
+    
+    del_comments ./html/$html_file
+    del_blank ./html/$html_file
+    create_para ./html/$html_file
+    create_header ./html/$html_file
+    create_symbols ./html/$html_file
+    create_list ./html/$html_file
+    create_code ./html/$html_file
+    create_title 
+    create_footer
+}
 
-del_comments ./html/$html_file
-del_blank ./html/$html_file
-create_para ./html/$html_file
-create_header ./html/$html_file
-create_symbols ./html/$html_file
-create_list ./html/$html_file
-create_code ./html/$html_file
-create_title 
-create_footer
+# Main
+# Create the HTML file
+declare -a param_arry
+while [ ! $# -eq 0 ] # While parameter is not equal to 0/null
+do
+    param_arry+=($1)
+    shift
+done
+
+for i in ${param_arry[@]}
+do
+    
+    if [[ $i =~ ^--help ]]; then
+        # do somethin
+        echo "USEAGE: wwbs [OPTION]"
+        echo "  --help                  Print help message"
+        echo "  --file='page/text'      Input text"
+        echo "  --raw='text'            Print raw html file"
+        echo "  --delete='text'         Delete raw html file"
+        echo "EXAMPLE: "
+        echo "  wwbs --file=page/sample"
+        echo "  wwbs --raw=sample"
+        exit
+    elif [[ $i =~ ^--file ]]; then
+        file_path=$(echo $i | sed -nr 's/(^--file=)(.*)/\2/p')
+        file=$(echo $i | sed -nr 's/(^--file=)(.*\/)(.*)/\3/p')
+        create_html
+    elif [[ $i =~ ^--raw ]]; then
+        file=$(echo $i | sed -nr 's/(^--raw=)(.*)/\2/p')
+        cat html/"$file.html"
+        exit
+    elif [[ $i =~ ^--delete ]]; then
+        file=$(echo $i | sed -nr 's/(^--delete=)(.*)/\2/p')
+        html_file="$file.html"
+        if [[ -f html/$html_file ]]; then
+            rm html/$html_file
+            echo "Deleted $html_file"
+        fi
+        exit
+    else
+        exit
+    fi
+done
 
 # Clean up
 file=./html/$(ls ./html/ | grep ".htmln")
