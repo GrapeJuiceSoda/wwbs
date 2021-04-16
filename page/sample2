@@ -1,0 +1,22 @@
+title "Another Test Website" # The title of the website
+header #Contains the Author and Date
+nav # Navigation Bar
+
+#--------------------------------------------------
+
+# Basic Text
+h2 Writing Shell Scripts
+
+Writing shell scripts is easy and fun
+
+But there are some issues.
+
+The first one is 
+ul
+* Dynamic typing
+
+Like python and javascript, scripting langauges are dynamically typed.
+This leads to type errors when passing around variables.
+
+
+footer # Back to the Top

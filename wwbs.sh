@@ -189,7 +189,7 @@ get_files (){
 
 # Main
 # Create the HTML file
-shopt -s extglob
+shopt -s extglob # Enable regex for rm command
 declare -a param_array
 declare -a file_array
 author="GrapeJuiceSoda"
