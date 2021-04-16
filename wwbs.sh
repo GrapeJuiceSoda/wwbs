@@ -105,23 +105,23 @@ create_list (){
 }
 
 create_title (){
-    title_src=$(head -n 1 ./page/$file)
+    title_src=$(head -n 1 $file_path)
     anchor="<a href=\"#top\"><\/a>"
-    title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" ./html/$html_file)
+    title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" ./html/$file_name.html)
     style_sheet="<link rel="stylesheet" href="../style/style.css">"
-    sub_title=$(sed -rn "s/header/<small>$author \| $date<\/small>/p" ./html/$html_file)
-    sed -in "1,4d" ./html/$html_file
+    sub_title=$(sed -rn "s/header/<small>$author \| $date<\/small>/p" ./html/$file_name.html)
+    sed -in "1,4d" ./html/$file_name.html
     sed -i "
     1i $style_sheet
     2i $title
     3i $sub_title
     4i $anchor
-    " ./html/$html_file
+    " ./html/$file_name.html
 }
 
 create_footer (){
-    sed -rin "$ d" ./html/$html_file
-    echo "<small><a name="top" href="">Top</a></small>" >> ./html/$html_file
+    sed -rin "$ d" ./html/$file_name.html
+    echo "<small><a name="top" href="">Top</a></small>" >> ./html/$file_name
 }
 
 create_code (){
@@ -146,56 +146,91 @@ create_code (){
     " $1
 }
 
+# Input is path to htmlfile
 create_html (){
-    cp $file_path "$file.html"
-    html_file="$file.html"
-    mv "$html_file" ./html/
+    if [[ -f $1 ]]; then
+        del_comments $1
+        del_blank $1
+        create_para $1
+        create_header $1
+        create_symbols $1
+        create_list $1
+        create_code $1
+        create_title 
+        create_footer
+    else
+        echo "$1 does not exits"
+    fi
+}
+
+# If the propor directory sturucture is not found, create missing direcotries
+deploy_filesystem (){
+    exit
+}
+
+# Create an array of files in the page directory
+get_files (){
+    # Store file path to text file (relative to root direcotry)
+    for entry in page/*
+    do
+        file_array+=($entry)
+    done
+
+    # Get just the names of the file
     
-    author="GrapeJuiceSoda"
-    date=$(date)
-    
-    del_comments ./html/$html_file
-    del_blank ./html/$html_file
-    create_para ./html/$html_file
-    create_header ./html/$html_file
-    create_symbols ./html/$html_file
-    create_list ./html/$html_file
-    create_code ./html/$html_file
-    create_title 
-    create_footer
+    for file_path in ${file_array[@]}
+    do
+        file_name=$(echo $file_path | sed -nr 's/(.*\/)(.*)/\2/p')
+        cp $file_path "./html/$file_name.html"
+        create_html "./html/$file_name.html"
+    done
 }
 
 # Main
 # Create the HTML file
-declare -a param_arry
+shopt -s extglob
+declare -a param_array
+declare -a file_array
+author="GrapeJuiceSoda"
+date=$(date)
+
 while [ ! $# -eq 0 ] # While parameter is not equal to 0/null
 do
-    param_arry+=($1)
+    param_array+=($1) # Add parameter to an array list
     shift
 done
 
-for i in ${param_arry[@]}
+if [[ ${#param_array} -eq 0 ]]; then
+    get_files
+fi
+
+for i in ${param_array[@]} # Loop through array
 do
     
+    # Check each item in array
     if [[ $i =~ ^--help ]]; then
-        # do somethin
         echo "USEAGE: wwbs [OPTION]"
         echo "  --help                  Print help message"
         echo "  --file='page/text'      Input text"
         echo "  --raw='text'            Print raw html file"
         echo "  --delete='text'         Delete raw html file"
+        echo "    no flags              Convert all files to html"
         echo "EXAMPLE: "
         echo "  wwbs --file=page/sample"
         echo "  wwbs --raw=sample"
         exit
+
     elif [[ $i =~ ^--file ]]; then
         file_path=$(echo $i | sed -nr 's/(^--file=)(.*)/\2/p')
-        file=$(echo $i | sed -nr 's/(^--file=)(.*\/)(.*)/\3/p')
-        create_html
+        file_name=$(echo $i | sed -nr 's/(^--file=)(.*\/)(.*)/\3/p')
+        cp $file_path "./html/$file_name.html"
+        create_html "./html/$file_name.html"
+
     elif [[ $i =~ ^--raw ]]; then
         file=$(echo $i | sed -nr 's/(^--raw=)(.*)/\2/p')
         cat html/"$file.html"
         exit
+
     elif [[ $i =~ ^--delete ]]; then
         file=$(echo $i | sed -nr 's/(^--delete=)(.*)/\2/p')
         html_file="$file.html"
@@ -204,14 +239,16 @@ do
             echo "Deleted $html_file"
         fi
         exit
+
     else
+        echo "Please check wwbs --help"
         exit
     fi
 done
 
 # Clean up
-file=./html/$(ls ./html/ | grep ".htmln")
+file="./html/$file_name.html"
 if [[ -f $file ]]; then
-    echo "Removing something"
-    rm $file
+    echo "Removing temp files"
+    rm html/!(*.html)
 fi
