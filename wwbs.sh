@@ -120,8 +120,9 @@ create_title (){
 }
 
 create_footer (){
+    # Delete the last line of file
     sed -rin "$ d" ./html/$file_name.html
-    echo "<small><a name="top" href="">Top</a></small>" >> ./html/$file_name
+    echo "<small><a name="top" href="">Top</a></small>" >> ./html/$file_name.html
 }
 
 create_code (){
