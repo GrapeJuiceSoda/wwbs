@@ -3,9 +3,9 @@
 #Input $html_file
 del_comments (){
     # Delete all lines that begin with #
-    sed -i '/^#/d' $1
+    sed -i '/^#/d' "$1"
     # Delete comments inline
-    sed -ri 's/(.+)(#.+)/\1/' $1
+    sed -ri 's/(.+)(#.+)/\1/' "$1"
 }
 
 #Input $html_file
@@ -24,7 +24,7 @@ del_blank (){
     
     :delete
     g # Override the pattern buffer with the hold pattern
-    ' $1
+    ' "$1"
 }
     
 #Input $html_file
@@ -46,7 +46,7 @@ create_para(){
     b
     }
     p # Print
-    ' $1
+    ' "$1"
 }    
 
 
@@ -54,7 +54,7 @@ create_para(){
 create_header (){
     sed -rin "
     s/(^h)([0-9])(.*)/<h\2>\3<\/h\2>/
-    " $1
+    " "$1"
 }
 
 # Input is $html_file
@@ -86,7 +86,7 @@ create_symbols (){
     s/(^\* )(.*)/<li>\2<\/li>/
     b
 
-    ' $1
+    ' "$1"
 }
 
 create_list (){
@@ -101,28 +101,27 @@ create_list (){
         b move # primitive looping!!
         }
         s/.*/<\/ul>/ # Substitute all of the pattern buffer for <\ul>
-    " $1
+    " "$1"
 }
 
 create_title (){
-    title_src=$(head -n 1 $file_path)
     anchor="<a href=\"#top\"><\/a>"
-    title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" ./html/$file_name.html)
+    title=$(sed -rn "s/(title \")(.*)(\")/<h1>\2<\/h1>/p" ./html/"$file_name".html)
     style_sheet="<link rel="stylesheet" href="../style/style.css">"
-    sub_title=$(sed -rn "s/header/<small>$author \| $date<\/small>/p" ./html/$file_name.html)
-    sed -in "1,4d" ./html/$file_name.html
+    sub_title=$(sed -rn "s/header/<small>$author \| $date<\/small>/p" ./html/"$file_name".html)
+    sed -in "1,4d" ./html/"$file_name".html
     sed -i "
     1i $style_sheet
     2i $title
     3i $sub_title
     4i $anchor
-    " ./html/$file_name.html
+    " ./html/"$file_name".html
 }
 
 create_footer (){
     # Delete the last line of file
-    sed -rin "$ d" ./html/$file_name.html
-    echo "<small><a name="top" href="">Top</a></small>" >> ./html/$file_name.html
+    sed -rin "$ d" ./html/"$file_name".html
+    echo "<small><a name="top" href="">Top</a></small>" >> ./html/"$file_name".html
 }
 
 create_code (){
@@ -144,19 +143,19 @@ create_code (){
         b move # primitive looping!!
         }
         s/.*/<\/code>\n<\/pre>\n<\/div>/ # Substitute all of the pattern buffer
-    " $1
+    " "$1"
 }
 
 # Input is path to htmlfile
 create_html (){
     if [[ -f $1 ]]; then
-        del_comments $1
-        del_blank $1
-        create_para $1
-        create_header $1
-        create_symbols $1
-        create_list $1
-        create_code $1
+        del_comments "$1"
+        del_blank "$1"
+        create_para "$1"
+        create_header "$1"
+        create_symbols "$1"
+        create_list "$1"
+        create_code "$1"
         create_title 
         create_footer
     else
@@ -174,15 +173,15 @@ get_files (){
     # Store file path to text file (relative to root direcotry)
     for entry in page/*
     do
-        file_array+=($entry)
+        file_array+=("$entry")
     done
 
     # Get just the names of the file
     
-    for file_path in ${file_array[@]}
+    for file_path in "${file_array[@]}"
     do
-        file_name=$(echo $file_path | sed -nr 's/(.*\/)(.*)/\2/p')
-        cp $file_path "./html/$file_name.html"
+        file_name=$(echo "$file_path" | sed -nr 's/(.*\/)(.*)/\2/p')
+        cp "$file_path" "./html/$file_name.html"
         create_html "./html/$file_name.html"
     done
 }
@@ -197,7 +196,7 @@ date=$(date)
 
 while [ ! $# -eq 0 ] # While parameter is not equal to 0/null
 do
-    param_array+=($1) # Add parameter to an array list
+    param_array+=("$1") # Add parameter to an array list
     shift
 done
 
@@ -205,11 +204,11 @@ if [[ ${#param_array} -eq 0 ]]; then
     get_files
 fi
 
-for i in ${param_array[@]} # Loop through array
+for i in "${param_array[@]}" # Loop through array
 do
     
     # Check each item in array
-    if [[ $i =~ ^--help ]]; then
+    if [[ "$i" =~ ^--help ]]; then
         echo "USEAGE: wwbs [OPTION]"
         echo "  --help                  Print help message"
         echo "  --file='page/text'      Input text"
@@ -221,22 +220,22 @@ do
         echo "  wwbs --raw=sample"
         exit
 
-    elif [[ $i =~ ^--file ]]; then
-        file_path=$(echo $i | sed -nr 's/(^--file=)(.*)/\2/p')
-        file_name=$(echo $i | sed -nr 's/(^--file=)(.*\/)(.*)/\3/p')
-        cp $file_path "./html/$file_name.html"
-        create_html "./html/$file_name.html"
+    elif [[ "$i" =~ ^--file ]]; then
+        file_path=$(echo "$i" | sed -nr 's/(^--file=)(.*)/\2/p')
+        file_name=$(echo "$i" | sed -nr 's/(^--file=)(.*\/)(.*)/\3/p')
+        cp "$file_path" "./html/""$file_name"".html"
+        create_html "./html/""$file_name"".html"
 
-    elif [[ $i =~ ^--raw ]]; then
-        file=$(echo $i | sed -nr 's/(^--raw=)(.*)/\2/p')
+    elif [[ "$i" =~ ^--raw ]]; then
+        file=$(echo "$i" | sed -nr 's/(^--raw=)(.*)/\2/p')
         cat html/"$file.html"
         exit
 
-    elif [[ $i =~ ^--delete ]]; then
-        file=$(echo $i | sed -nr 's/(^--delete=)(.*)/\2/p')
+    elif [[ "$i" =~ ^--delete ]]; then
+        file=$(echo "$i" | sed -nr 's/(^--delete=)(.*)/\2/p')
         html_file="$file.html"
         if [[ -f html/$html_file ]]; then
-            rm html/$html_file
+            rm html/"$html_file"
             echo "Deleted $html_file"
         fi
         exit
@@ -248,7 +247,7 @@ do
 done
 
 # Clean up
-file="./html/$file_name.html"
+file="./html/""$file_name"".html"
 if [[ -f $file ]]; then
     echo "Removing temp files"
     rm html/!(*.html)
