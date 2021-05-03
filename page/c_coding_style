@@ -1,0 +1,219 @@
+title "My Coding Style I stole from people"
+header
+nav
+
+h2 Inspirations:
+link https://doc.cat-v.org/bell_labs/pikestyle/ cat-v_coding_style
+
+link https://man.openbsd.org/style/ openbsd_coding_style
+
+link https://suckless.org/coding_style/ suckless_coing_style
+
+link https://pedantic.software/fxc/blog/coding-style.html/ pedantic_software_coding_style
+
+
+h2 Comments:
+code
+/*
+ * Very important single-line comments look like this.
+ */
+!
+/* single-line comments are all lowercase */
+!
+/*
+ * Multi-line comments look like this.  Make them real sentences.
+ * Fill them so they look like real paragraphs.
+ */
+!
+/*
+ * Avoid obvious comments such as
+ * "Exit 0 on success."
+ */
+
+h2 Variable Names:
+ul
+* Length is not a virtue in a name; clarity of expression is. (pikestyle)
+* Counters variables are one letter names
+* Temporary variables have 'temp_' at the beginning
+* Local variables are only used in a small scope, so they don't need long names. Long names are annoying both to read and to write. 
+
+h4 Local variables
+
+code
+    int lowerCamelCase;
+
+h4 Function names
+
+code
+    void*
+    snake_case(int a)
+    {
+!
+    }
+
+h4 Pointers
+
+code
+    char* snake_case_p /* always add a '_p' at the end */
+
+h4 Struct/Union/Enum
+
+code
+    typedef struct 
+    {
+        int a;
+        int b;
+    }UpperCamelCase;
+!
+    Enum
+    {
+        UPPERCASE;
+        UPPERCASE;
+    }
+
+h2 Variable Declarations
+ul
+* Declare variables at the beginning of blocks, and leave an empty line after the last declaration
+
+code
+    int f(void) {
+        int a;
+!    
+        for (a = 0; a < 3; a++) {
+            int validInForBlock;
+!    
+            validInForBlock = a;
+        }
+!    
+        {
+            int scopedVariable;
+!    
+            scopedVariable = 42;
+        }
+    }
+
+h2 Tests and boolean values
+ul
+* Use 'bool' types instead of integers
+* Always use compound assignment and test unless the line grows too long
+   
+code
+    if (!(p = malloc(sizeof(*p))))
+	    hcf();
+
+h2 Structs:
+ul
+* Use typedef when declaring structs
+* Struct names are always capitalized
+    
+code
+    typedef struct {
+        int a;
+        int b;
+    }Foo;
+
+h2 Enums:
+ul
+* Use enums for values that are grouped semantically
+
+code
+    Enum {
+    	DIRECTION_X,
+    	DIRECTION_Y,
+    	DIRECTION_Z
+    };
+
+h2 Pointers:
+ul
+* In declaration of pointers the * is adjacent to variable name, not type.
+
+code
+    int *int_p;
+    short *short_p;
+    Rect *rect_p;
+    void(*func_p)(int i);
+
+ul
+* Cast void pointers to char pointers when doing pointer arithmetic
+
+code
+    void *target = (char *)s->elems + (s->logicalLen * s->elemSize);
+
+ul
+* Try to use array syntax instead of pointer arithmetic
+
+code
+    int a = int_arr[4];
+    /* NOT */
+    int a = *(int_p + 4)
+
+h2 Function prototypes:
+ul
+* Prototypes should not have variable names associated with the types
+
+code
+    void function(int);
+
+h2 Functions definitions:
+
+code
+    static void
+    func(void)
+    {
+        puts("....");
+    }
+!
+    void*
+    func(void)
+    {
+        puts("....");
+    }
+
+h2 Keywords:
+ul
+* Put a space between control flow keywords (if, for, while)
+
+code
+    if (usage)
+    {
+        puts("....");
+    }
+!
+    while (usage)
+    {
+        puts("....");
+    }
+
+h2 Exiting
+ul
+* Exits should be 0 on success, or non-zero for errors.
+
+h2 Casting
+ul
+* Do not cast anything that returns a void pointer i.e. malloc 
+
+h2 Operators
+ul
+* Put a space before and after binary operators
+
+code
+    int two = 1 + 1;
+
+ul
+* Don't put spaces after unary operators
+
+code
+    int fd = -1;
+    (int)42;
+
+h2 Switch case:
+ul
+* Indent both case labels and statements in switch blocks
+
+code
+    switch (val) {
+        case 1:
+            break;
+    }
+
+footer
