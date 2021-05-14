@@ -163,11 +163,6 @@ create_html (){
     fi
 }
 
-# If the propor directory sturucture is not found, create missing direcotries
-deploy_filesystem (){
-    exit
-}
-
 # Create an array of files in the page directory
 get_files (){
     # Store file path to text file (relative to root direcotry)
@@ -186,6 +181,140 @@ get_files (){
     done
 }
 
+deploy (){
+    dir_reqired=("html" "page" "pictures" "style")
+    missing_flag=0
+
+    for i in "${dir_reqired[@]}"
+    do 
+        if [[ ! -d "$i" ]]; then
+            if [[ $missing_flag -eq 0 ]]; then
+                missing_flag=1
+            fi
+            printf "%s does not exits, creating ...\n" $i
+            mkdir -p $i
+        fi
+    done
+
+    if [[ $missing_flag -eq 1 ]]; then
+        cat <<EOF > ./page/sample
+title "Test Website" # The title of the website
+header #Contains the Author and Date
+nav
+
+# Basic Text
+h2 Header
+This is how you write the text.
+# <p>This is how you write the text</p>
+You can have multiple lines.
+If you have a new line inbetween the lines, it gets counted as a new paragraph.
+
+Like in regular markdown!
+
+h2 Basic Link: 
+link https://www.google.com/ link_to_google
+
+h2 This is a Picture
+Basic Picture
+
+picture pic1.jpg
+# <img src="./sample_pic/pic1.jpg"/>
+
+h2 Basic Lists
+
+ul
+* The first item
+* The second item
+* The third item
+
+h2 Some C Code
+code
+static void
+fill_str_arr(void *strArr, void *string, int index)
+{
+    void *temp_str_p = &string; /* create a pointer to string */
+!
+    memcpy((char *)(strArr + sizeof(unsigned long)*index), 
+            temp_str_p, sizeof(unsigned long));
+}
+!
+static void
+free_str_arr(void *strArr, int logicalLen, int bool){
+    if(bool > 0)
+    {
+        for(int i = 0; i < logicalLen; i++)
+        {
+            free(*(char **)(strArr + sizeof(unsigned long)*i));
+        }
+    }
+    else
+    {
+        free(strArr);
+    }
+}
+
+footer # Back to the Top
+EOF
+        cat <<EOF >./style/style.css
+* {
+    width: 45em;
+    margin: auto;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    word-wrap: break-word;
+    background-color: #ffffee;
+    line-height: 1.5;
+    word-spacing: 5px;
+}
+
+img {
+	max-width: 20em;
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+small {
+    word-spacing: 3px;
+}
+
+h1 {
+    /* color: #8888cc; */
+    color: #17a;
+
+}
+
+a {
+    color: #17a;
+}
+
+a:hover {
+    color:#8888cc; text-decoration: underline;
+}
+
+.hl_box {
+    background-color: #A9A9A9;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.hl_box pre {
+    background-color: #A9A9A9;
+}
+
+.hl_box code {
+    background-color: #A9A9A9;
+}
+EOF
+        
+        echo 
+        printf "Missing directories created\n"
+        printf "Sample files have been created in /page and /syntax\n"
+        echo
+        printf "Run ./wwbs --help\n"
+        exit 1
+    fi
+}
+
 # Main
 # Create the HTML file
 shopt -s extglob # Enable regex for rm command
@@ -193,6 +322,8 @@ declare -a param_array
 declare -a file_array
 author="GrapeJuiceSoda"
 date=$(date)
+
+deploy
 
 while [ ! $# -eq 0 ] # While parameter is not equal to 0/null
 do
@@ -209,16 +340,23 @@ do
     
     # Check each item in array
     if [[ "$i" =~ ^--help ]]; then
-        echo "USEAGE: wwbs [OPTION]"
-        echo "  --help                  Print help message"
-        echo "  --file='page/text'      Input text"
-        echo "  --raw='text'            Print raw html file"
-        echo "  --delete='text'         Delete raw html file"
-        echo "    no flags              Convert all files to html"
-        echo "EXAMPLE: "
-        echo "  wwbs --file=page/sample"
-        echo "  wwbs --raw=sample"
-        exit
+        cat <<EOF
+USEAGE: wwbs [OPTION]"
+  --help                  Print help message
+  --file='page/text'      Input text
+  --raw='text'            Print raw html file
+  --delete='text'         Delete raw html file
+    no flags              Convert all files to html
+EXAMPLE:
+  ./wwbs --file=page/sample
+  ./wwbs --raw=sample
+
+* Text files go into /page\n
+* CSS style sheets go into /style\n
+* Pictures go into /pictures\n
+* When creating text files follow the syntax in page/sample\n
+EOF
+        exit 0
 
     elif [[ "$i" =~ ^--file ]]; then
         file_path=$(echo "$i" | sed -nr 's/(^--file=)(.*)/\2/p')
