@@ -240,9 +240,9 @@ fill_str_arr(void *strArr, void *string, int index)
 !
 static void
 free_str_arr(void *strArr, int logicalLen, int bool){
-    if(bool > 0)
+    if (bool > 0)
     {
-        for(int i = 0; i < logicalLen; i++)
+        for (int i = 0; i < logicalLen; i++)
         {
             free(*(char **)(strArr + sizeof(unsigned long)*i));
         }
@@ -256,14 +256,13 @@ free_str_arr(void *strArr, int logicalLen, int bool){
 footer # Back to the Top
 EOF
         cat <<EOF >./style/style.css
-* {
-    width: 45em;
-    margin: auto;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+body:not(.hl_box) {
+    width: 40em;
+    margin-left: auto;
+    margin-right: auto;
     word-wrap: break-word;
     background-color: #ffffee;
-    line-height: 1.5;
+    line-height: 1.3;
     word-spacing: 5px;
 }
 
@@ -280,7 +279,6 @@ small {
 h1 {
     /* color: #8888cc; */
     color: #17a;
-
 }
 
 a {
@@ -292,23 +290,24 @@ a:hover {
 }
 
 .hl_box {
+    padding-left: 20px;
+    padding-right: 5px;
     background-color: #A9A9A9;
-    margin-top: 1em;
-    margin-bottom: 1em;
 }
 
 .hl_box pre {
     background-color: #A9A9A9;
 }
 
-.hl_box code {
+.hl_box code {  
+    line-height: 1.3;
     background-color: #A9A9A9;
 }
 EOF
         
         echo 
         printf "Missing directories created\n"
-        printf "Sample files have been created in /page and /syntax\n"
+        printf "Sample files have been created in /page and /style\n"
         echo
         printf "Run ./wwbs --help\n"
         exit 1
@@ -341,7 +340,7 @@ do
     # Check each item in array
     if [[ "$i" =~ ^--help ]]; then
         cat <<EOF
-USEAGE: wwbs [OPTION]"
+USEAGE: wwbs [OPTION]
   --help                  Print help message
   --file='page/text'      Input text
   --raw='text'            Print raw html file
@@ -351,10 +350,10 @@ EXAMPLE:
   ./wwbs --file=page/sample
   ./wwbs --raw=sample
 
-* Text files go into /page\n
-* CSS style sheets go into /style\n
-* Pictures go into /pictures\n
-* When creating text files follow the syntax in page/sample\n
+* Text files go into /page
+* CSS style sheets go into /style
+* Pictures go into /pictures
+* When creating text files follow the syntax in page/sample
 EOF
         exit 0
 
