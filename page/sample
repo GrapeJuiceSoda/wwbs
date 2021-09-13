@@ -1,0 +1,56 @@
+title "Test Website" # The title of the website
+header #Contains the Author and Date
+nav
+
+# Basic Text
+h2 Header
+This is how you write the text.
+# <p>This is how you write the text</p>
+You can have multiple lines.
+If you have a new line inbetween the lines, it gets counted as a new paragraph.
+
+Like in regular markdown!
+
+h2 Basic Link: 
+link https://www.google.com/ link_to_google
+
+h2 This is a Picture
+Basic Picture
+
+picture pic1.jpg
+# <img src="./sample_pic/pic1.jpg"/>
+
+h2 Basic Lists
+
+ul
+* The first item
+* The second item
+* The third item
+
+h2 Some C Code
+code
+static void
+fill_str_arr(void *strArr, void *string, int index)
+{
+    void *temp_str_p = &string; /* create a pointer to string */
+!
+    memcpy((char *)(strArr + sizeof(unsigned long)*index), 
+            temp_str_p, sizeof(unsigned long));
+}
+!
+static void
+free_str_arr(void *strArr, int logicalLen, int bool){
+    if (bool > 0)
+    {
+        for (int i = 0; i < logicalLen; i++)
+        {
+            free(*(char **)(strArr + sizeof(unsigned long)*i));
+        }
+    }
+    else
+    {
+        free(strArr);
+    }
+}
+
+footer # Back to the Top
